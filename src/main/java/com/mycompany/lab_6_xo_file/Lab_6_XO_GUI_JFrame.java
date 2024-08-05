@@ -4,7 +4,10 @@
  */
 package com.mycompany.lab_6_xo_file;
 
-import java.util.Set;
+import java.io.*;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -28,6 +31,52 @@ public class Lab_6_XO_GUI_JFrame extends javax.swing.JFrame {
         X = new XOPlayer('X');
         load();
 
+    }
+
+    private void writePlayer() {
+        FileOutputStream fos = null;
+        try {
+            File file = new File("friends.dat");
+            fos = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(X);
+            oos.writeObject(O);
+            oos.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("File Not Found.");
+        } catch (IOException ex) {
+            System.out.println("I/O error.");
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException ex) {
+                System.out.println("I/O error.");
+            }
+        }
+    }
+
+    private void readPlayer() {
+        FileInputStream fis = null;
+        try {
+            File file = new File("friends.dat");
+            fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            X = (XOPlayer) ois.readObject();
+            O = (XOPlayer) ois.readObject();
+            ois.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("File Not Found.");
+        } catch (IOException ex) {
+            System.out.println("I/O error.");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Class Not Found.");
+        } finally {
+            try {
+                fis.close();
+            } catch (IOException ex) {
+                System.out.println("I/O error.");
+            }
+        }
     }
 
     public void showTable() {
