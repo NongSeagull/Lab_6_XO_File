@@ -4,11 +4,13 @@
  */
 package com.mycompany.lab_6_xo_file;
 
+import java.io.Serializable;
+
 /**
  *
  * @author 65160230 Piyapong
  */
-public class XOPlayer {
+public class XOPlayer implements Serializable {
 
     private char player;
     private int winTimes;

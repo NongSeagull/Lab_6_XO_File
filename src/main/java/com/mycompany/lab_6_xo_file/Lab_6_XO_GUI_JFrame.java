@@ -29,6 +29,7 @@ public class Lab_6_XO_GUI_JFrame extends javax.swing.JFrame {
         //config player to variable
         O = new XOPlayer('O');
         X = new XOPlayer('X');
+        readPlayer();
         load();
 
     }
@@ -36,21 +37,23 @@ public class Lab_6_XO_GUI_JFrame extends javax.swing.JFrame {
     private void writePlayer() {
         FileOutputStream fos = null;
         try {
-            File file = new File("friends.dat");
+            File file = new File("players.dat");
             fos = new FileOutputStream(file);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(X);
             oos.writeObject(O);
             oos.close();
         } catch (FileNotFoundException ex) {
-            System.out.println("File Not Found.");
+            System.out.println("WritePlayer : File Not Found.");
         } catch (IOException ex) {
-            System.out.println("I/O error.");
+            System.out.println("WritePlayer : I/O error.");
         } finally {
             try {
-                fos.close();
+                if (fos != null) {
+                    fos.close();
+                }
             } catch (IOException ex) {
-                System.out.println("I/O error.");
+                System.out.println("WritePlayer(Finally) : I/O error.");
             }
         }
     }
@@ -58,23 +61,25 @@ public class Lab_6_XO_GUI_JFrame extends javax.swing.JFrame {
     private void readPlayer() {
         FileInputStream fis = null;
         try {
-            File file = new File("friends.dat");
+            File file = new File("players.dat");
             fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
             X = (XOPlayer) ois.readObject();
             O = (XOPlayer) ois.readObject();
             ois.close();
         } catch (FileNotFoundException ex) {
-            System.out.println("File Not Found.");
+            System.out.println("readPlayer : File Not Found.");
         } catch (IOException ex) {
-            System.out.println("I/O error.");
+            System.out.println("readPlayer : I/O error.");
         } catch (ClassNotFoundException ex) {
-            System.out.println("Class Not Found.");
+            System.out.println("readPlayer : Class Not Found.");
         } finally {
             try {
-                fis.close();
+                if (fis != null) {
+                    fis.close();
+                }
             } catch (IOException ex) {
-                System.out.println("I/O error.");
+                System.out.println("readPlayer(Finally) : I/O error.");
             }
         }
     }
@@ -519,6 +524,7 @@ public class Lab_6_XO_GUI_JFrame extends javax.swing.JFrame {
         } else if (board.checkWin()) {
             lblStatus.setText("  Congratulations, " + board.getCurrentPlayer().getSymbol() + " is winner.");
         }
+        writePlayer();
         setEnableBoard(false);
         board.updateStats();
         showPlayerInfo();
